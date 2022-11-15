@@ -185,8 +185,6 @@ if __name__ == '__main__':
     args.eval_path = args.base_path + args.name + '/output/eval_' + args.dataset
     os.makedirs(args.eval_path, exist_ok=True)
 
-    torch.cuda.set_device(args.local_rank)
-
     if args.local_rank == 0:
         make_dirs(args)
 
