@@ -38,6 +38,5 @@ python eval.py  --name=SDHNet  --restore_step=x --iters=6 --dataset=brain  --dat
 ```
 
 ## Acknowledgment
-We follow the functional implementation in [Cascade VTN](https://github.com/microsoft/Recursive-Cascaded-Networks), and the overall code framework is adapted from [RAFT](https://github.com/princeton-vl/RAFT).
-
+We follow the functional implementation in [Cascade VTN](https://github.com/microsoft/Recursive-Cascaded-Networks), and the overall code framework is adapted from [RAFT](https://github.com/princeton-vl/RAFT).  
 Thanks a lot for their great contribution!
