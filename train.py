@@ -162,7 +162,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--name', type=str, default='SDHNet_UpLoad', help='name your experiment')
     parser.add_argument('--dataset', type=str, default='brain', help='which dataset to use for training')
-
     parser.add_argument('--epoch', type=int, default=5, help='number of epochs')
     parser.add_argument('--lr', type=float, default=1e-4, help='initial learning rate')
     parser.add_argument('--clip', type=float, default=1.0)
@@ -170,14 +169,10 @@ if __name__ == '__main__':
     parser.add_argument('--sum_freq', type=int, default=1000)
     parser.add_argument('--val_freq', type=int, default=2000)
     parser.add_argument('--round', type=int, default=20000, help='number of batches per epoch')
-
     parser.add_argument('--data_path', type=str, default='E:/Registration/Code/TMI2022/Github/Data_MRIBrain/')
     parser.add_argument('--base_path', type=str, default='E:/Registration/Code/TMI2022/Github/')
-
     parser.add_argument('--iters', type=int, default=6)
-
     parser.add_argument('--local_rank', default=0, type=int, help='node rank for distributed training')
-
     args = parser.parse_args()
 
     args.model_path = args.base_path + args.name + '/output/checkpoints_' + args.dataset
@@ -196,7 +191,6 @@ if __name__ == '__main__':
     args.nums_gpu = torch.cuda.device_count()
     args.batch = args.batch
     args.num_steps = args.epoch * args.round
-
     args.files = open(args.base_path + args.name + '/output/train_' + args.dataset + '.txt', 'a+')
 
     if args.local_rank == 0:

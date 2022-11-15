@@ -339,19 +339,14 @@ if __name__ == '__main__':
     parser.add_argument('--model', type=str, default='SDHNet_lpba', help='evaluation experiment')
     parser.add_argument('--dataset', type=str, default='brain', help='which dataset to use for evaluation')
     parser.add_argument('--dataset_test', nargs='+', default=['lpba'], help='specific dataset to use for evaluation')
-
     parser.add_argument('--data_path', type=str, default='E:/Registration/Code/TMI2022/Github/Data_MRIBrain/')
     parser.add_argument('--base_path', type=str, default='E:/Registration/Code/TMI2022/Github/')
-
     parser.add_argument('--iters', type=int, default=6)
-
     parser.add_argument('--local_rank', default=0, type=int, help='node rank for distributed training')
-
     args = parser.parse_args()
 
     args.model_path = args.base_path + args.name + '/output/checkpoints_' + args.dataset
     args.eval_path = args.base_path + args.name + '/output/eval_' + args.dataset
-
     args.restore_ckpt = join(args.model_path, args.model + '.pth')
 
     model = Framework(args)
