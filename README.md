@@ -28,14 +28,19 @@ The packages and their corresponding version we used in this repository are list
 ## Training
 After configuring the environment, please use this command to train the model.
 ```python
-python -m torch.distributed.launch --nproc_per_node=4 train.py  --name=SDHNet  --iters=6 --dataset=brain  --dataset_val=lpba_val   --data_path=/xx/xx/  --base_path=/xx/xx/
+python -m torch.distributed.launch --nproc_per_node=4 train.py  --name=SDHNet  --iters=6 --dataset=brain  --data_path=/xx/xx/  --base_path=/xx/xx/
 
 ```
 ## Testing
 Use this command to obtain the testing results.
 ```python
-python eval.py  --name=SDHNet  --restore_step=x --iters=6 --dataset=brain  --dataset_val=lpba_val   --data_path=/xx/xx/  --base_path=/xx/xx/
+python eval.py  --name=SDHNet  --model=SDHNet_lpba --dataset=brain --dataset_test=lpba  --iters=6 --local_rank=0 --data_path=/xx/xx/  --base_path=/xx/xx/
 ```
+
+## Datasets and Pre-trained Model (Based on Cascade VTN)
+We follow Cascade VTN to prepare the training and testing datasets, please kindly refer to [Cascade VTN](https://github.com/microsoft/Recursive-Cascaded-Networks) for details.
+
+The related pretrained models are available, and please kindly refer to the testing commands.
 
 ## Acknowledgment
 We follow the functional implementation in [Cascade VTN](https://github.com/microsoft/Recursive-Cascaded-Networks), and the overall code framework is adapted from [RAFT](https://github.com/princeton-vl/RAFT).  
