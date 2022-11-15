@@ -37,7 +37,7 @@ Use this command to obtain the testing results.
 python eval.py  --name=SDHNet  --model=SDHNet_lpba --dataset=brain --dataset_test=lpba  --iters=6 --local_rank=0 --data_path=/xx/xx/  --base_path=/xx/xx/
 ```
 
-## Datasets and Pre-trained Model (Based on Cascade VTN)
+## Datasets and Pre-trained Models (Based on Cascade VTN)
 We follow Cascade VTN to prepare the training and testing datasets, and please refer to [Cascade VTN](https://github.com/microsoft/Recursive-Cascaded-Networks) for details.
 
 The related [pretrained models](https://drive.google.com/drive/folders/1BpxkIzL_SrPuKdqC_buiINawNZVMqoWc?usp=share_link) are available, and please refer to the testing commands for evaluating.
