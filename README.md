@@ -38,9 +38,9 @@ python eval.py  --name=SDHNet  --model=SDHNet_lpba --dataset=brain --dataset_tes
 ```
 
 ## Datasets and Pre-trained Model (Based on Cascade VTN)
-We follow Cascade VTN to prepare the training and testing datasets, please kindly refer to [Cascade VTN](https://github.com/microsoft/Recursive-Cascaded-Networks) for details.
+We follow Cascade VTN to prepare the training and testing datasets, and please kindly refer to [Cascade VTN](https://github.com/microsoft/Recursive-Cascaded-Networks) for details.
 
-The related pretrained models are available, and please kindly refer to the testing commands.
+The related pretrained models are available, and please kindly refer to the testing commands for evaluating.
 
 ## Acknowledgment
 We follow the functional implementation in [Cascade VTN](https://github.com/microsoft/Recursive-Cascaded-Networks), and the overall code framework is adapted from [RAFT](https://github.com/princeton-vl/RAFT).  
