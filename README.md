@@ -2,7 +2,7 @@
 
 **Self-Distilled Hierarchical Network for Unsupervised Deformable Image Registration**
 
-Shenglong Zhou, Bo Hu, Zhiwei Xiong(*) and Feng Wu
+Shenglong Zhou, Bo Hu, Zhiwei Xiong and Feng Wu
 
 University of Science and Technology of China (USTC)
 
