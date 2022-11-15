@@ -21,7 +21,7 @@ def make_dirs(args):
         os.makedirs(args.eval_path)
 
 
-def fetch_loss(affines, deforms, agg_flow, image1, image2, AGG_flows, total_steps):
+def fetch_loss(affines, deforms, agg_flow, image1, image2, AGG_flows):
     det = losses.det3x3(affines['A'])
     det_loss = torch.sum((det - 1.0) ** 2) / 2
 
@@ -134,7 +134,7 @@ def train(args):
             optimizer.zero_grad()
             image2_aug, affines, deforms, agg_flow, AGG_flows = model(image1, image2)
 
-            losses, metrics = fetch_loss(affines, deforms, agg_flow, image1, image2_aug, AGG_flows, total_steps)
+            losses, metrics = fetch_loss(affines, deforms, agg_flow, image1, image2_aug, AGG_flows)
 
             total_steps = total_steps + 1
             logger.push(metrics)
