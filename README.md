@@ -10,7 +10,8 @@ University of Science and Technology of China (USTC)
 
 ![Framework](https://user-images.githubusercontent.com/26156941/201927630-23340d83-52a0-45b6-a007-19c7fb603ea9.png)
 
-We present a novel unsupervised learning approach named Self-Distilled Hierarchical Network (SDHNet). By decomposing the registration procedure into several iterations, SDHNet generates hierarchical deformation fields (HDFs) simultaneously in each iteration and connects different iterations utilizing the learned hidden state.
+We present a novel unsupervised learning approach named Self-Distilled Hierarchical Network (SDHNet).  
+By decomposing the registration procedure into several iterations, SDHNet generates hierarchical deformation fields (HDFs) simultaneously in each iteration and connects different iterations utilizing the learned hidden state.
 Hierarchical features are extracted to generate HDFs through several parallel GRUs, and HDFs are then fused adaptively conditioned on themselves as well as contextual features from the input image.
 Furthermore, different from common unsupervised methods that only apply similarity loss and regularization loss, SDHNet introduces a novel self-deformation distillation scheme. 
 This scheme distills the final deformation field as the teacher guidance, which adds constraints for intermediate deformation fields.
