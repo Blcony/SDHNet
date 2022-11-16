@@ -1,10 +1,23 @@
+import os
+import torch.distributed as dist
+import random
 import numpy as np
-
 import torch
 import torch.nn as nn
-
 from .utils import aug_transform, warp
 from .networks import affnet, sdhnet
+
+
+def init(args):
+    if not os.path.isdir(args.model_path):
+        os.makedirs(args.model_path)
+    if not os.path.isdir(args.eval_path):
+        os.makedirs(args.eval_path)
+    dist.init_process_group(backend='nccl')
+    random.seed(123)
+    np.random.seed(123)
+    torch.manual_seed(123)
+    torch.cuda.manual_seed_all(123)
 
 
 class Framework(nn.Module):
