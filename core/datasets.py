@@ -89,8 +89,10 @@ def generate_oasis_pairs_val(files):
     pairs = []
     labels = []
     for i in range(len(files)-1):
-        pairs.append([join(files[i], 'aligned_norm.nii.gz'), join(files[i+1], 'aligned_norm.nii.gz')])
-        labels.append([join(files[i], 'aligned_seg35.nii.gz'), join(files[i+1], 'aligned_seg35.nii.gz')])
+        for j in range(len(files)-1):
+            if i != j:
+                pairs.append([join(files[i], 'aligned_norm.nii.gz'), join(files[i+1], 'aligned_norm.nii.gz')])
+                labels.append([join(files[i], 'aligned_seg35.nii.gz'), join(files[i+1], 'aligned_seg35.nii.gz')])
     return pairs, labels
 
 
@@ -106,9 +108,11 @@ def generate_mindboggle_pairs(files):
 def generate_mindboggle_pairs_val(files):
     pairs = []
     labels = []
-    for i in range(len(files)-1):
-        pairs.append([join(files[i], 'data.nii.gz'), join(files[i+1], 'data.nii.gz')])
-        labels.append([join(files[i], 'seg.nii.gz'), join(files[i+1], 'seg.nii.gz')])
+    for i in range(len(files) - 1):
+        for j in range(len(files) - 1):
+            if i != j:
+                pairs.append([join(files[i], 'data.nii.gz'), join(files[i+1], 'data.nii.gz')])
+                labels.append([join(files[i], 'seg.nii.gz'), join(files[i+1], 'seg.nii.gz')])
     return pairs, labels
 
 
