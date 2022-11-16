@@ -48,7 +48,7 @@ def fetch_dataloader(args):
     elif args.dataset == 'brain':
         train_dataset = datasets.BrainTrain(args)
     elif args.dataset == 'oasis':
-        train_dataset = datasets.BrainTrain(args)
+        train_dataset = datasets.OasisTrain(args)
     elif args.dataset == 'mindboggle':
         train_dataset = datasets.MindboggleTrain(args)
     else:
