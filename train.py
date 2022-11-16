@@ -13,33 +13,34 @@ from core.utils.warp import warp3D
 from core.framework import Framework, init
 
 
+def fetch_optimizer(args, model):
+    optimizer = optim.Adam(model.parameters(), lr=args.lr)
+    milestones = [args.round*3, args.round*4, args.round*5]  # args.epoch == 5
+    scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=milestones, gamma=0.5)
+
+    return optimizer, scheduler
+
+
 def fetch_loss(affines, deforms, agg_flow, image1, image2, AGG_flows):
     det = losses.det3x3(affines['A'])
     det_loss = torch.sum((det - 1.0) ** 2) / 2
-
     I = torch.cuda.FloatTensor([[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]])
     eps = 1e-5
     epsI = torch.cuda.FloatTensor([[[eps * elem for elem in row] for row in Mat] for Mat in I])
     C = torch.matmul(affines['A'].permute(0, 2, 1), affines['A']) + epsI
     s1, s2, s3 = losses.elem_sym_polys_of_eigen_values(C)
     ortho_loss = torch.sum(s1 + (1 + eps) * (1 + eps) * s2 / s3 - 3 * 2 * (1 + eps))
-
+    dist_loss = losses.distill_loss(AGG_flows)
     image2_warped = warp3D()(image2, agg_flow)
     sim_loss = 0.1 * det_loss + 0.1 * ortho_loss + losses.similarity_loss(image1, image2_warped)
-
     reg_loss = 0.0
     for i in range(len(deforms)):
         reg_loss = reg_loss + losses.regularize_loss(deforms[i]['flow'])
-
     pure_loss = sim_loss + 0.5 * reg_loss
-
-    dist_loss = losses.distill_loss(AGG_flows)
-
+    metrics = {'loss': pure_loss.item()}
     whole_loss = pure_loss + 0.1 * dist_loss
 
-    metrics = {'loss': pure_loss.item()}
-
-    return [pure_loss, whole_loss], metrics
+    return [whole_loss, pure_loss], metrics
 
 
 def fetch_dataloader(args):
@@ -61,15 +62,6 @@ def fetch_dataloader(args):
     if args.local_rank == 0:
         print('Image pairs in training: %d' % len(train_dataset), file=args.files, flush=True)
     return train_loader
-
-
-def fetch_optimizer(args, model):
-    optimizer = optim.Adam(model.parameters(), lr=args.lr)
-
-    milestones = [args.round*3, args.round*4, args.round*5]  # args.epoch == 5
-    scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=milestones, gamma=0.5)
-
-    return optimizer, scheduler
 
 
 class Logger:
@@ -116,21 +108,20 @@ def train(args):
 
     total_steps = 0
     logger = Logger(model, scheduler, args)
+    thre = 5
 
     should_keep_training = True
     while should_keep_training:
         for i_batch, data_blob in enumerate(train_loader):
             model.train()
             image1, image2 = [x.cuda(non_blocking=True) for x in data_blob]
-
             optimizer.zero_grad()
             image2_aug, affines, deforms, agg_flow, AGG_flows = model(image1, image2)
-
             losses, metrics = fetch_loss(affines, deforms, agg_flow, image1, image2_aug, AGG_flows)
 
             total_steps = total_steps + 1
+            loss = losses[0] if total_steps > thre*args.round else losses[1]
             logger.push(metrics)
-            loss = losses[0] if total_steps > 5*args.round else losses[1]
             loss.backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(), args.clip)
             optimizer.step()
