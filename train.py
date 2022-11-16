@@ -1,7 +1,6 @@
 import os
 import argparse
-import numpy as np
-import random
+
 
 import torch
 import torch.nn as nn
@@ -11,14 +10,7 @@ from torch.utils.data import DataLoader
 import core.datasets as datasets
 import core.losses as losses
 from core.utils.warp import warp3D
-from core.framework import Framework
-
-
-def make_dirs(args):
-    if not os.path.isdir(args.model_path):
-        os.makedirs(args.model_path)
-    if not os.path.isdir(args.eval_path):
-        os.makedirs(args.eval_path)
+from core.framework import Framework, init
 
 
 def fetch_loss(affines, deforms, agg_flow, image1, image2, AGG_flows):
@@ -181,12 +173,7 @@ if __name__ == '__main__':
     os.makedirs(args.eval_path, exist_ok=True)
 
     if args.local_rank == 0:
-        make_dirs(args)
-
-    random.seed(123)
-    np.random.seed(123)
-    torch.manual_seed(123)
-    torch.cuda.manual_seed_all(123)
+        init(args)
 
     args.nums_gpu = torch.cuda.device_count()
     args.batch = args.batch
