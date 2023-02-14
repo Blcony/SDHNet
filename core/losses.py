@@ -51,37 +51,3 @@ def regularize_loss(flow):
     ret = ret / np.prod(flow.shape[1:5])
 
     return ret
-
-
-def dist_value(flow1, flow2):
-    ret = torch.mean((flow1 - flow2) ** 2).sqrt()
-    return ret
-
-
-def dist_spatialgra(flow1, flow2):
-    ret1 = torch.mean(((flow1[:, :, 1:, :, :] - flow1[:, :, :-1, :, :]) -
-                       (flow2[:, :, 1:, :, :] - flow2[:, :, :-1, :, :])) ** 2).sqrt()
-
-    ret2 = torch.mean(((flow1[:, :, :, 1:, :] - flow1[:, :, :, :-1, :]) -
-                       (flow2[:, :, :, 1:, :] - flow2[:, :, :, :-1, :])) ** 2).sqrt()
-
-    ret3 = torch.mean(((flow1[:, :, :, :, 1:] - flow1[:, :, :, :, :-1]) -
-                       (flow2[:, :, :, :, 1:] - flow2[:, :, :, :, :-1])) ** 2).sqrt()
-
-    return (ret1+ret2+ret3) / 3.0
-
-
-def distill_loss(AGG_flows, gamma=0.8):
-    final_flow = AGG_flows[-1].detach()
-
-    nums = len(AGG_flows)
-
-    dist_loss = 0.0
-    for i in range(1, nums):
-        weight = gamma ** (nums-1-i)
-        dist_loss_1 = dist_value(final_flow, AGG_flows[i-1])
-        dist_loss_2 = dist_spatialgra(final_flow, AGG_flows[i-1])
-
-        dist_loss = dist_loss + weight * (dist_loss_1 + dist_loss_2)
-
-    return dist_loss / (nums-1)

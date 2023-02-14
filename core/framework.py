@@ -1,23 +1,8 @@
-import os
-import torch.distributed as dist
-import random
 import numpy as np
 import torch
 import torch.nn as nn
 from .utils import aug_transform, warp
 from .networks import affnet, sdhnet
-
-
-def init(args):
-    if not os.path.isdir(args.model_path):
-        os.makedirs(args.model_path)
-    if not os.path.isdir(args.eval_path):
-        os.makedirs(args.eval_path)
-    dist.init_process_group(backend='nccl')
-    random.seed(123)
-    np.random.seed(123)
-    torch.manual_seed(123)
-    torch.cuda.manual_seed_all(123)
 
 
 class Framework(nn.Module):
@@ -67,13 +52,13 @@ class Framework(nn.Module):
         agg_flow = agg_flow_0
 
         Deforms = [deforms_0]
-        AGG_flows = []
+        agg_flows = []
         for i in range(self.args.iters - 1):
             deforms, hid = self.defnet[i + 1](Img1, warpImg, cont, hid)
             agg_flow = self.reconstruction(agg_flow, deforms['flow']) + deforms['flow']
             warpImg = self.reconstruction(augImg2, agg_flow)
 
             Deforms.append(deforms)
-            AGG_flows.append(agg_flow)
+            agg_flows.append(agg_flow)
 
-        return augImg2, affines, Deforms, agg_flow, AGG_flows
+        return augImg2, affines, Deforms, agg_flow, agg_flows
