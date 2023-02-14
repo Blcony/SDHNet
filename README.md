@@ -44,9 +44,8 @@ We follow Cascade VTN to prepare the training and testing datasets, please refer
 
 The related [pretrained models](https://drive.google.com/drive/folders/1BpxkIzL_SrPuKdqC_buiINawNZVMqoWc?usp=share_link) are available, please refer to the testing command for evaluating.
 
-## TODO
 
-## Citation
+## TODO
 
 
 ## Acknowledgment
