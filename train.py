@@ -34,6 +34,7 @@ def fetch_loss(affines, deforms, agg_flow, image1, image2):
     C = torch.matmul(affines['A'].permute(0, 2, 1), affines['A']) + epsI
     s1, s2, s3 = losses.elem_sym_polys_of_eigen_values(C)
     ortho_loss = torch.sum(s1 + (1 + eps) * (1 + eps) * s2 / s3 - 3 * 2 * (1 + eps))
+    aff_loss = 0.1 * det_loss + 0.1 * ortho_loss
 
     # deform loss
     image2_warped = warp3D()(image2, agg_flow)
@@ -43,11 +44,10 @@ def fetch_loss(affines, deforms, agg_flow, image1, image2):
     for i in range(len(deforms)):
         reg_loss = reg_loss + losses.regularize_loss(deforms[i]['flow'])
 
-    whole_loss = 0.1 * det_loss + 0.1 * ortho_loss + sim_loss + 0.5 * reg_loss
+    whole_loss = aff_loss + sim_loss + 0.5 * reg_loss
 
     metrics = {
-        'det_loss': det_loss.item(),
-        'ortho_loss': ortho_loss.item(),
+        'aff_loss': aff_loss.item(),
         'sim_loss': sim_loss.item(),
         'reg_loss': reg_loss.item()
     }
