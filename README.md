@@ -45,7 +45,10 @@ We follow Cascade VTN to prepare the training and testing datasets, please refer
 The related [pretrained models](https://drive.google.com/drive/folders/1BpxkIzL_SrPuKdqC_buiINawNZVMqoWc?usp=share_link) are available, please refer to the testing command for evaluating.
 
 
-## TODO
+## Note
+Due to our further exploration of the self-distillation, the current codebase does not involve the related part.
+
+Please be free to contact us by e-mail if you are interested in this part or have any problems.
 
 
 ## Acknowledgment
