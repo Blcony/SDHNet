@@ -2,6 +2,8 @@
 
 **Self-Distilled Hierarchical Network for Unsupervised Deformable Image Registration**
 
+IEEE Transactions on Medical Imaging (TMI)
+
 Shenglong Zhou, Bo Hu, Zhiwei Xiong and Feng Wu
 
 University of Science and Technology of China (USTC)
@@ -41,6 +43,11 @@ python eval.py  --name=SDHNet  --model=SDHNet_lpba --dataset=brain --dataset_tes
 We follow Cascade VTN to prepare the training and testing datasets, please refer to [Cascade VTN](https://github.com/microsoft/Recursive-Cascaded-Networks) for details.
 
 The related [pretrained models](https://drive.google.com/drive/folders/1BpxkIzL_SrPuKdqC_buiINawNZVMqoWc?usp=share_link) are available, please refer to the testing command for evaluating.
+
+## TODO
+
+## Citation
+
 
 ## Acknowledgment
 We follow the functional implementation in [Cascade VTN](https://github.com/microsoft/Recursive-Cascaded-Networks), and the overall code framework is adapted from [RAFT](https://github.com/princeton-vl/RAFT).  
