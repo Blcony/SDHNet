@@ -46,7 +46,7 @@ The related [pretrained models](https://drive.google.com/drive/folders/1BpxkIzL_
 
 
 ## Note
-Due to our further exploration of the self-distillation, the current codebase does not involve the related part temporarily.
+Due to our further exploration of the self-distillation, the current repo does not involve the related part temporarily.
 
 Please be free to contact us by e-mail if you are interested in this part or have any problems.
 
