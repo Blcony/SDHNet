@@ -1,16 +1,18 @@
 import os
 import argparse
-
+import numpy as np
+import random
 
 import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
+import torch.distributed as dist
 
 import core.datasets as datasets
 import core.losses as losses
 from core.utils.warp import warp3D
-from core.framework import Framework, init
+from core.framework import Framework
 
 
 def fetch_optimizer(args, model):
@@ -21,26 +23,36 @@ def fetch_optimizer(args, model):
     return optimizer, scheduler
 
 
-def fetch_loss(affines, deforms, agg_flow, image1, image2, AGG_flows):
+def fetch_loss(affines, deforms, agg_flow, image1, image2):
+    # affine loss
     det = losses.det3x3(affines['A'])
     det_loss = torch.sum((det - 1.0) ** 2) / 2
+
     I = torch.cuda.FloatTensor([[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]])
     eps = 1e-5
     epsI = torch.cuda.FloatTensor([[[eps * elem for elem in row] for row in Mat] for Mat in I])
     C = torch.matmul(affines['A'].permute(0, 2, 1), affines['A']) + epsI
     s1, s2, s3 = losses.elem_sym_polys_of_eigen_values(C)
     ortho_loss = torch.sum(s1 + (1 + eps) * (1 + eps) * s2 / s3 - 3 * 2 * (1 + eps))
-    dist_loss = losses.distill_loss(AGG_flows)
+
+    # deform loss
     image2_warped = warp3D()(image2, agg_flow)
-    sim_loss = 0.1 * det_loss + 0.1 * ortho_loss + losses.similarity_loss(image1, image2_warped)
+    sim_loss = losses.similarity_loss(image1, image2_warped)
+
     reg_loss = 0.0
     for i in range(len(deforms)):
         reg_loss = reg_loss + losses.regularize_loss(deforms[i]['flow'])
-    pure_loss = sim_loss + 0.5 * reg_loss
-    metrics = {'loss': pure_loss.item()}
-    whole_loss = pure_loss + 0.1 * dist_loss
 
-    return [whole_loss, pure_loss], metrics
+    whole_loss = 0.1 * det_loss + 0.1 * ortho_loss + sim_loss + 0.5 * reg_loss
+
+    metrics = {
+        'det_loss': det_loss.item(),
+        'ortho_loss': ortho_loss.item(),
+        'sim_loss': sim_loss.item(),
+        'reg_loss': reg_loss.item()
+    }
+
+    return whole_loss, metrics
 
 
 def fetch_dataloader(args):
@@ -48,10 +60,6 @@ def fetch_dataloader(args):
         train_dataset = datasets.LiverTrain(args)
     elif args.dataset == 'brain':
         train_dataset = datasets.BrainTrain(args)
-    elif args.dataset == 'oasis':
-        train_dataset = datasets.OasisTrain(args)
-    elif args.dataset == 'mindboggle':
-        train_dataset = datasets.MindboggleTrain(args)
     else:
         print('Wrong Dataset')
 
@@ -108,24 +116,25 @@ def train(args):
 
     total_steps = 0
     logger = Logger(model, scheduler, args)
-    thre = 5
 
     should_keep_training = True
     while should_keep_training:
         for i_batch, data_blob in enumerate(train_loader):
             model.train()
             image1, image2 = [x.cuda(non_blocking=True) for x in data_blob]
-            optimizer.zero_grad()
-            image2_aug, affines, deforms, agg_flow, AGG_flows = model(image1, image2)
-            losses, metrics = fetch_loss(affines, deforms, agg_flow, image1, image2_aug, AGG_flows)
 
-            total_steps = total_steps + 1
-            loss = losses[0] if total_steps > thre*args.round else losses[1]
-            logger.push(metrics)
+            optimizer.zero_grad()
+            image2_aug, affines, deforms, agg_flow, agg_flows = model(image1, image2)
+
+            loss, metrics = fetch_loss(affines, deforms, agg_flow, image1, image2_aug)
             loss.backward()
+
             torch.nn.utils.clip_grad_norm_(model.parameters(), args.clip)
             optimizer.step()
             scheduler.step()
+            total_steps = total_steps + 1
+
+            logger.push(metrics)
 
             if total_steps % args.val_freq == args.val_freq - 1:
                 PATH = args.model_path + '/%s_%d.pth' % (args.name, total_steps + 1)
@@ -143,7 +152,7 @@ def train(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--name', type=str, default='SDHNet_UpLoad', help='name your experiment')
+    parser.add_argument('--name', type=str, default='SDHNet', help='name your experiment')
     parser.add_argument('--dataset', type=str, default='brain', help='which dataset to use for training')
     parser.add_argument('--epoch', type=int, default=5, help='number of epochs')
     parser.add_argument('--lr', type=float, default=1e-4, help='initial learning rate')
@@ -159,12 +168,18 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     args.model_path = args.base_path + args.name + '/output/checkpoints_' + args.dataset
-    os.makedirs(args.model_path, exist_ok=True)
     args.eval_path = args.base_path + args.name + '/output/eval_' + args.dataset
-    os.makedirs(args.eval_path, exist_ok=True)
+
+    dist.init_process_group(backend='nccl')
 
     if args.local_rank == 0:
-        init(args)
+        os.makedirs(args.model_path, exist_ok=True)
+        os.makedirs(args.eval_path, exist_ok=True)
+
+    random.seed(123)
+    np.random.seed(123)
+    torch.manual_seed(123)
+    torch.cuda.manual_seed_all(123)
 
     args.nums_gpu = torch.cuda.device_count()
     args.batch = args.batch
