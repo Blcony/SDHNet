@@ -18,8 +18,6 @@ Hierarchical features are extracted to generate HDFs through several parallel GR
 Furthermore, different from common unsupervised methods that only apply similarity loss and regularization loss, SDHNet introduces a novel self-deformation distillation scheme. 
 This scheme distills the final deformation field as the teacher guidance, which adds constraints for intermediate deformation fields.
 
-
-
 ## Requirements
 The packages and their corresponding version we used in this repository are listed in below.
 - Python 3
@@ -33,6 +31,7 @@ After configuring the environment, please use this command to train the model.
 python -m torch.distributed.launch --nproc_per_node=4 train.py  --name=SDHNet  --iters=6 --dataset=brain  --data_path=/xx/xx/  --base_path=/xx/xx/
 
 ```
+
 ## Testing
 Use this command to obtain the testing results.
 ```python
@@ -44,14 +43,25 @@ We follow Cascade VTN to prepare the training and testing datasets, please refer
 
 The related [pretrained models](https://drive.google.com/drive/folders/1BpxkIzL_SrPuKdqC_buiINawNZVMqoWc?usp=share_link) are available, please refer to the testing command for evaluating.
 
-
 ## Note
 Due to our further exploration of the self-distillation, the current repo does not involve the related part temporarily.
 
 Please be free to contact us by e-mail if you are interested in this part or have any problems.
 
+## Citation
+If you find this work or code is helpful in your research, please cite:
+```
+@article{zhou2023self,
+  title={Self-Distilled Hierarchical Network for Unsupervised Deformable Image Registration},
+  author={Zhou, Shenglong and Hu, Bo and Xiong, Zhiwei and Wu, Feng},
+  journal={IEEE Transactions on Medical Imaging},
+  year={2023},
+  publisher={IEEE}
+}
+```
 
 ## Acknowledgment
 We follow the functional implementation in [Cascade VTN](https://github.com/microsoft/Recursive-Cascaded-Networks), and the overall code framework is adapted from [RAFT](https://github.com/princeton-vl/RAFT).  
 
 Thanks a lot for their great contribution!
+
