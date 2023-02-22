@@ -2,7 +2,7 @@
 
 **Self-Distilled Hierarchical Network for Unsupervised Deformable Image Registration**
 
-IEEE Transactions on Medical Imaging (TMI)
+IEEE Transactions on Medical Imaging (TMI) 2023
 
 Shenglong Zhou, Bo Hu, Zhiwei Xiong and Feng Wu
 
