@@ -46,7 +46,7 @@ The related [pretrained models](https://drive.google.com/drive/folders/1BpxkIzL_
 ## Note
 Due to our further exploration of the self-distillation, the current repo does not involve the related part temporarily.
 
-Please be free to contact us by e-mail (slzhou96@mail.ustc.edu.cn) if you are interested in this part or have any problems.
+Please be free to contact us by e-mail (slzhou96@mail.ustc.edu.cn) if you are interested in this part.
 
 ## Citation
 If you find this work or code is helpful in your research, please cite:
