@@ -1,6 +1,6 @@
 # Self-Distilled Hierarchical Network
 
-**Self-Distilled Hierarchical Network for Unsupervised Deformable Image Registration**
+**[Self-Distilled Hierarchical Network for Unsupervised Deformable Image Registration](https://ieeexplore.ieee.org/abstract/document/10042453)**
 
 IEEE Transactions on Medical Imaging (TMI) 2023
 
