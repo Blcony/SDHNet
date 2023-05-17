@@ -43,7 +43,6 @@ We follow Cascade VTN to prepare the training and testing datasets, please refer
 
 The related [pretrained models](https://drive.google.com/drive/folders/1BpxkIzL_SrPuKdqC_buiINawNZVMqoWc?usp=share_link) are available, please refer to the testing command for evaluating.
 
-
 ## Citation
 If you find this work or code is helpful in your research, please cite:
 ```
@@ -57,6 +56,13 @@ If you find this work or code is helpful in your research, please cite:
 ```
 
 ## Note
-We follow the functional implementation in [Cascade VTN](https://github.com/microsoft/Recursive-Cascaded-Networks), and the overall code framework is adapted from [RAFT](https://github.com/princeton-vl/RAFT). Thanks a lot for their great contribution!
+Due to our further exploration of the self-distillation, the current repo does not involve the related part temporarily. 
 
-Due to our further exploration of the self-distillation, the current repo does not involve the related part temporarily. Please be free to contact us by e-mail (slzhou96@mail.ustc.edu.cn) if you have any questions.
+Please be free to contact us by e-mail (slzhou96@mail.ustc.edu.cn) if you have any questions.
+
+## Acknowledgement
+We follow the functional implementation in [Cascade VTN](https://github.com/microsoft/Recursive-Cascaded-Networks), and the overall code framework is adapted from [RAFT](https://github.com/princeton-vl/RAFT). 
+
+Thanks a lot for their great contribution!
+
+
