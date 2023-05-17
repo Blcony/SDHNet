@@ -55,12 +55,12 @@ If you find this work or code is helpful in your research, please cite:
 }
 ```
 
-## Note
+## Contact
 Due to our further exploration of the self-distillation, the current repo does not involve the related part temporarily. 
 
 Please be free to contact us by e-mail (slzhou96@mail.ustc.edu.cn) if you have any questions.
 
-## Acknowledgement
+## Acknowledgements
 We follow the functional implementation in [Cascade VTN](https://github.com/microsoft/Recursive-Cascaded-Networks), and the overall code framework is adapted from [RAFT](https://github.com/princeton-vl/RAFT). 
 
 Thanks a lot for their great contribution!
