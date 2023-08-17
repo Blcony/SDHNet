@@ -19,7 +19,7 @@ Furthermore, different from common unsupervised methods that only apply similari
 This scheme distills the final deformation field as the teacher guidance, which adds constraints for intermediate deformation fields.
 
 ## Requirements
-The packages and their corresponding version we used in this repository are listed in below.
+The packages and their corresponding version we used in this repository are listed below.
 - Python 3
 - Pytorch 1.1
 - Numpy
@@ -58,7 +58,7 @@ If you find this work or code is helpful in your research, please cite:
 ## Contact
 Due to our further exploration of the self-distillation, the current repo does not involve the related part temporarily. 
 
-Please be free to contact us by e-mail (slzhou96@mail.ustc.edu.cn) or wechat (slzhou96)if you have any questions.
+Please be free to contact us by e-mail (slzhou96@mail.ustc.edu.cn) or WeChat (slzhou96) if you have any questions.
 
 ## Acknowledgements
 We follow the functional implementation in [Cascade VTN](https://github.com/microsoft/Recursive-Cascaded-Networks), and the overall code framework is adapted from [RAFT](https://github.com/princeton-vl/RAFT). 
